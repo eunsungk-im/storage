@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동물 퀴즈</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .quiz-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .question {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+        .answers {
+            list-style-type: none;
+            padding: 0;
+        }
+        .answers li {
+            margin: 10px 0;
+        }
+        .answer-button {
+            padding: 10px 20px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .answer-button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>동물 퀴즈</h1>
+        <div class="question" id="question">문제를 불러오는 중...</div>
+        <ul class="answers" id="answers">
+            <!-- 답변 버튼이 여기에 동적으로 추가됩니다 -->
+        </ul>
+        <div class="result" id="result"></div>
+    </div>
+    
+    <script>
+        // 동물 퀴즈 데이터
+        const quizData = [
+            {
+                question: "세계에서 가장 큰 육상 동물은 무엇일까요?",
+                answers: ["코끼리", "기린", "호랑이", "사자"],
+                correct: 0
+            },
+            {
+                question: "가장 빠른 육상 동물은 무엇일까요?",
+                answers: ["치타", "사자", "코끼리", "말"],
+                correct: 0
+            },
+            {
+                question: "이 동물은 '바다의 소'라고도 불립니다. 무엇일까요?",
+                answers: ["돌고래", "상어", "해마", "고래"],
+                correct: 3
+            },
+            {
+                question: "북극곰의 주요 서식지는 어디인가요?",
+                answers: ["북극", "남극", "아프리카", "아시아"],
+                correct: 0
+            },
+            {
+                question: "다음 중 초식 동물은 무엇인가요?",
+                answers: ["호랑이", "사자", "코끼리", "늑대"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        // 퀴즈 문제와 답변을 업데이트하는 함수
+        function loadQuestion() {
+            const questionElement = document.getElementById('question');
+            const answersElement = document.getElementById('answers');
+            const resultElement = document.getElementById('result');
+
+            // 현재 문제와 답변을 가져오기
+            const currentQuestion = quizData[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+
+            // 답변 버튼을 동적으로 생성
+            answersElement.innerHTML = '';
+            currentQuestion.answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.textContent = answer;
+                button.className = 'answer-button';
+                button.onclick = () => checkAnswer(index);
+                answersElement.appendChild(button);
+            });
+
+            // 결과 메시지 초기화
+            resultElement.textContent = '';
+        }
+
+        // 답변을 체크하는 함수
+        function checkAnswer(selectedIndex) {
+            const correctIndex = quizData[currentQuestionIndex].correct;
+            const resultElement = document.getElementById('result');
+
+            if (selectedIndex === correctIndex) {
+                resultElement.textContent = '정답입니다! 🎉';
+            } else {
+                resultElement.textContent = '틀렸습니다. 😢';
+            }
+
+            // 다음 문제로 이동
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                // 2초 후에 다음 문제로 이동
+                setTimeout(loadQuestion, 2000);
+            } else {
+                setTimeout(() => {
+                    alert('퀴즈가 모두 끝났습니다!');
+                    currentQuestionIndex = 0;  // 처음부터 다시 시작
+                    loadQuestion();
+                }, 2000);
+            }
+        }
+
+        // 페이지 로드 시 첫 문제를 로드
+        loadQuestion();
+    </script>
+</body>
+</html>
